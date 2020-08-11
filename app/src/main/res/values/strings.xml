@@ -24,4 +24,21 @@
     <string name="shop_by_categories">shop by categories</string>
     <string name="purchase_history">purchase history</string>
     <string name="your_order">your order</string>
+
+    <!-- Bottom Navigation -->
+    <string name="camera">Camera</string>
+    <string name="mic">Mic</string>
+    <string name="search">Search</string>
+    <string name="camera_text">Camera</string>
+    <string name="mic_text">Mic</string>
+
+    <!-- Shopping Cart  -->
+    <string name="subtotal_text">Subtotal </string>
+    <string name="proceed_to_checkout_text">Proceed to checkout</string>
+    <string name="no_item_in_you_cart">No Item In you cart</string>
+    <string name="delete_text">Delete</string>
+
+    <!-- List Shopping Car -->
+    <string name="quantity_text">Quantity : </string>
+
 </resources>
