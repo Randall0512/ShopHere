@@ -40,5 +40,18 @@
 
     <!-- List Shopping Car -->
     <string name="quantity_text">Quantity : </string>
+    <string name="shop_name_text">shop name text</string>
+    <string name="sign_in_text">sign in text</string>
+    <string name="sign_up_text">sign up text</string>
+    <string name="prompt_email">prompt email</string>
+    <string name="prompt_password">prompt password</string>
+    <string name="stay_signin_text">stay signin text</string>
+    <string name="action_sign_in">action sign in</string>
+    <string name="create_account_text">create account text</string>
+    <string name="prompt_username">prompt username</string>
+    <string name="show_password_text">show password text</string>
+    <string name="create_your_shophere_account_text">create your shophere account text</string>
+    <string name="sign_in_now_text">sign in now text</string>
+    <string name="or_text">or text</string>
 
 </resources>
