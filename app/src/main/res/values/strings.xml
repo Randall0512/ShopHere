@@ -1,3 +1,27 @@
 <resources>
     <string name="app_name">ShopHere</string>
+    <string name="recent">recent</string>
+    <string name="home">home</string>
+    <string name="shopping_cart">shopping cart</string>
+    <string name="menu">menu</string>
+    <string name="about">about</string>
+    <string name="notification">notification</string>
+    <string name="setting">setting</string>
+    <string name="log_out">log out</string>
+    <string name="profile">profile</string>
+    <string name="account">account</string>
+    <string name="video_games">video games</string>
+    <string name="software">software</string>
+    <string name="pet_supplies">pet supplies</string>
+    <string name="movie_television">movie television</string>
+    <string name="home_kitchen">home kitchen</string>
+    <string name="health_household">health household</string>
+    <string name="fashion">fashion</string>
+    <string name="computer">computer</string>
+    <string name="books">books</string>
+    <string name="art_craft">art craft</string>
+    <string name="all_categories">all categories</string>
+    <string name="shop_by_categories">shop by categories</string>
+    <string name="purchase_history">purchase history</string>
+    <string name="your_order">your order</string>
 </resources>
