@@ -14,7 +14,7 @@
         <activity android:name=".PurchaseHistory" />
         <activity android:name=".Shopping_cart" />
         <activity android:name=".payment_detail" />
-        <activity android:name=".menu_bar" />
+        <activity android:name=".MenuBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
