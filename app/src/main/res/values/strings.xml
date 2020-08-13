@@ -25,6 +25,8 @@
     <string name="purchase_history">purchase history</string>
     <string name="your_order">your order</string>
 
+    <!-- Main Activity -->
+
     <!-- Bottom Navigation -->
     <string name="camera">Camera</string>
     <string name="mic">Mic</string>
