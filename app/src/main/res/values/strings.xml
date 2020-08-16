@@ -70,6 +70,13 @@
     <string name="thank_text">Thank you ! Your order is complete.</string>
     <string name="mainstore_title">Video Game Accessories</string>
     <string name="shop_now_text">Shop Now</string>
+    <string name="shophere">ShopHere</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="stay_signed_in">stay signed in</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 
 
 </resources>
