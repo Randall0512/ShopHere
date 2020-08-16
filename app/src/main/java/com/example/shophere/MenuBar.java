@@ -1,5 +1,6 @@
 package com.example.shophere;
 
+<<<<<<< HEAD
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -172,3 +173,17 @@ public class MenuBar extends AppCompatActivity {
     }
 
 }
+=======
+import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MenuBar extends AppCompatActivity {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_menu_bar);
+    }
+}
+>>>>>>> origin/master

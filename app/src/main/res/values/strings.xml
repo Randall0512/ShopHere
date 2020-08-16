@@ -25,6 +25,8 @@
     <string name="purchase_history">purchase history</string>
     <string name="your_order">your order</string>
 
+    <!-- Main Activity -->
+
     <!-- Bottom Navigation -->
     <string name="camera">Camera</string>
     <string name="mic">Mic</string>
@@ -53,5 +55,21 @@
     <string name="create_your_shophere_account_text">create your shophere account text</string>
     <string name="sign_in_now_text">sign in now text</string>
     <string name="or_text">or text</string>
+    <!-- Payment_details-->
+    <string name="enter_payment_details">Enter Payment Details</string>
+    <string name="cancel">CANCEL</string>
+    <string name="enter_your_credit_card_information">Enter your credit card information</string>
+    <string name="scan_your_card">Scan your card</string>
+    <string name="run">run</string>
+    <string name="or2">------------------------------------------- or ------------------------------------------</string>
+    <string name="name_on_card">Name On Card</string>
+    <string name="con">CONTINUE</string>
+    <string name="pay_by_bank_transfer">Pay by bank transfer</string>
+    <!-- Payment_Complete-->
+    <string name="close_message_text">Close Message</string>
+    <string name="thank_text">Thank you ! Your order is complete.</string>
+    <string name="mainstore_title">Video Game Accessories</string>
+    <string name="shop_now_text">Shop Now</string>
+
 
 </resources>
