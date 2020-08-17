@@ -6,6 +6,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 public class HistoryViewHolder extends RecyclerView.ViewHolder {
     View view;
+    double tpp;
     public HistoryViewHolder (@NonNull View itemView) {
         super(itemView);
         view = itemView;
@@ -32,15 +34,15 @@ public class HistoryViewHolder extends RecyclerView.ViewHolder {
         });
     }
     public void setHistory(Context ct, String pID, String hID, int q, String pn, String pi, double pp){
-        TextView text_productID = view.findViewById(R.id.productID);
+        TextView text_historyID = view.findViewById(R.id.histID);
         TextView text_productName = view.findViewById(R.id.productName);
         TextView text_productPrice = view.findViewById(R.id.productPrice);
         TextView text_productQuantity = view.findViewById(R.id.quanti);
         TextView text_totalPrice = view.findViewById(R.id.totaPri);
         ImageView image_product = view.findViewById(R.id.productImage);
 
-        double tpp = pp * q;
-        text_productID.setText(pID);
+        tpp = pp * q;
+        text_historyID.setText(pID);
         text_productName.setText(pn);
         text_productPrice.setText(String.format("RM %.2f", pp));
         text_productQuantity.setText(String.valueOf(q));

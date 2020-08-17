@@ -1,31 +1,23 @@
 <resources>
     <string name="app_name">ShopHere</string>
-    <string name="recent">recent</string>
-    <string name="home">home</string>
-    <string name="shopping_cart">shopping cart</string>
-    <string name="menu">menu</string>
-    <string name="about">about</string>
-    <string name="notification">notification</string>
-    <string name="setting">setting</string>
-    <string name="log_out">log out</string>
-    <string name="profile">profile</string>
-    <string name="account">account</string>
-    <string name="video_games">video games</string>
-    <string name="software">software</string>
-    <string name="pet_supplies">pet supplies</string>
-    <string name="movie_television">movie television</string>
-    <string name="home_kitchen">home kitchen</string>
-    <string name="health_household">health household</string>
-    <string name="fashion">fashion</string>
-    <string name="computer">computer</string>
-    <string name="books">books</string>
-    <string name="art_craft">art craft</string>
-    <string name="all_categories">all categories</string>
-    <string name="shop_by_categories">shop by categories</string>
-    <string name="purchase_history">purchase history</string>
-    <string name="your_order">your order</string>
 
     <!-- Main Activity -->
+    <string name="shophere">ShopHere</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="stay_signed_in">stay signed in</string>
+
+    <!-- Sign Up -->
+    <string name="create_account_text">Create Account</string>
+    <string name="prompt_username">Username</string>
+    <string name="prompt_crea_email">Your email address</string>
+    <string name="prompt_crea_password">Create a Password</string>
+    <string name="show_password_text">Show password</string>
+    <string name="create_your_shophere_account_text">Create Your Shophere Account</string>
+    <string name="or_text">----------------------------- or -----------------------------</string>
+    <string name="sign_in_now_text">sign in now</string>
 
     <!-- Bottom Navigation -->
     <string name="camera">Camera</string>
@@ -33,28 +25,47 @@
     <string name="search">Search</string>
     <string name="camera_text">Camera</string>
     <string name="mic_text">Mic</string>
+    <string name="home">Home</string>
+    <string name="recent">Recent</string>
+    <string name="shopping_cart">Shopping Cart</string>
+    <string name="menu">Menu</string>
+
+    <!-- Menu Bar -->
+    <string name="your_order">Your Order</string>
+    <string name="purchase_history">Purchase History</string>
+    <string name="shop_by_categories">Shop By Categories</string>
+    <string name="all_categories">All Categories</string>
+    <string name="art_craft">Art Craft</string>
+    <string name="books">Books</string>
+    <string name="computer">Computer</string>
+    <string name="fashion">Fashion</string>
+    <string name="health_household">health &amp; household</string>
+    <string name="home_kitchen">Home &amp; Kitchen</string>
+    <string name="movie_television">Movie &amp; Television</string>
+    <string name="pet_supplies">Pet Supplies</string>
+    <string name="software">Software</string>
+    <string name="video_games">Video Games</string>
+
+    <string name="account">Account</string>
+    <string name="profile">Profile</string>
+    <string name="log_out">Log Out</string>
+
+    <string name="setting">setting</string>
+    <string name="notification">notification</string>
+    <string name="about">about</string>
 
     <!-- Shopping Cart  -->
     <string name="subtotal_text">Subtotal </string>
     <string name="proceed_to_checkout_text">Proceed to checkout</string>
-    <string name="no_item_in_you_cart">No Item In you cart</string>
+    <string name="no_item_in_you_cart">No Item In your cart</string>
     <string name="delete_text">Delete</string>
 
     <!-- List Shopping Car -->
     <string name="quantity_text">Quantity : </string>
     <string name="shop_name_text">shop name text</string>
-    <string name="sign_in_text">sign in text</string>
-    <string name="sign_up_text">sign up text</string>
-    <string name="prompt_email">prompt email</string>
-    <string name="prompt_password">prompt password</string>
-    <string name="stay_signin_text">stay signin text</string>
     <string name="action_sign_in">action sign in</string>
-    <string name="create_account_text">create account text</string>
-    <string name="prompt_username">prompt username</string>
-    <string name="show_password_text">show password text</string>
-    <string name="create_your_shophere_account_text">create your shophere account text</string>
-    <string name="sign_in_now_text">sign in now text</string>
-    <string name="or_text">or text</string>
+
+
     <!-- Payment_details-->
     <string name="enter_payment_details">Enter Payment Details</string>
     <string name="cancel">CANCEL</string>
@@ -65,17 +76,23 @@
     <string name="name_on_card">Name On Card</string>
     <string name="con">CONTINUE</string>
     <string name="pay_by_bank_transfer">Pay by bank transfer</string>
+
     <!-- Payment_Complete-->
     <string name="close_message_text">Close Message</string>
     <string name="thank_text">Thank you ! Your order is complete.</string>
     <string name="mainstore_title">Video Game Accessories</string>
     <string name="shop_now_text">Shop Now</string>
-    <string name="shophere">ShopHere</string>
-    <string name="sign_in">SIGN IN</string>
-    <string name="sign_up">SIGN UP</string>
-    <string name="stay_signed_in">stay signed in</string>
-    <string name="email">Email</string>
-    <string name="password">Password</string>
 
+    <!-- Product Overview  -->
+    <string name="instock_text">In Stock</string>
+    <string name="outstock_text">Out of Stock</string>
+    <string name="buy_now_text">Buy Now</string>
+    <string name="add_to_cart_text">Add to Cart</string>
+    <string name="about_us_text">About US</string>
+    <string name="description_text">Description</string>
+    <string name="features_detail_text"><![CDATA[Features & Detail]]></string>
+    <string name="product_details_text">Product Details</string>
+    <!-- Purchase History -->
+    <string name="no_history">No Item In your History</string>
 
 </resources>

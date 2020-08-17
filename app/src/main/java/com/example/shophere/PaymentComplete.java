@@ -51,10 +51,10 @@ public class PaymentComplete extends AppCompatActivity {
                 break;
 
         }
-        Toast.makeText(PaymentComplete.this, hID, Toast.LENGTH_SHORT).show();
         c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finish();
                 finish();
                 finish();
             }
@@ -74,7 +74,7 @@ public class PaymentComplete extends AppCompatActivity {
                 n.setText(pdName);
                 p.setText(String.format("RM %.2f", pdPrice));
                 tp.setText(String.format("RM %.2f", totalPrice));
-                qu.setText(String.valueOf(q));
+                qu.setText(String.format("Quantity : %d", q));
                 Picasso.get().load(pdImage).into(i);
             }
 

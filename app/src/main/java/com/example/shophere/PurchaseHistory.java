@@ -1,15 +1,19 @@
 package com.example.shophere;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Debug;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +36,8 @@ public class PurchaseHistory extends AppCompatActivity {
     TextView userName, no;
     ScrollView list;
     String pn,pi;
+    double pp;
+    int p;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +124,8 @@ public class PurchaseHistory extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 pn = dataSnapshot.child("product_name").getValue(String.class);
                                 pi = dataSnapshot.child("product_image").getValue(String.class);
-                                historyViewHolder.setHistory(getApplicationContext(), product.getProduct_id(), product.getHistory_id(), product.getQuantity(), pn, pi, product.getProduct_price());
+                                pp = dataSnapshot.child("product_price").getValue(double.class);
+                                historyViewHolder.setHistory(getApplicationContext(), product.getProduct_id(), product.getHistory_id(), product.getQuantity(), pn, pi, pp);
                             }
 
                             @Override
@@ -133,12 +140,32 @@ public class PurchaseHistory extends AppCompatActivity {
                         viewHolder.setOnclickListener(new HistoryViewHolder.ClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-
+                                Intent intent = new Intent(PurchaseHistory.this, PaymentComplete.class);
+                                intent.putExtra("history", getItem(position).getHistory_id());
+                                intent.putExtra("productID", getItem(position).getProduct_id());
+                                intent.putExtra("qt", getItem(position).getQuantity());
+                                startActivity(intent);
                             }
                             @Override
                             public void onItemLongClick(View view, int position) {
-                                //historyID = getItem(position).getShoppingCart_id();
-                                //delete(historyID);
+                                p = position;
+                                AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseHistory.this);
+                                builder.setMessage("Are you sure you want DELETE Your History item?").setCancelable(false)
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                historyID = getItem(p).getHistory_id();
+                                                delete(historyID);
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+                                             }
+                                        });
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
                             }
                         });
                         return viewHolder;
@@ -159,6 +186,6 @@ public class PurchaseHistory extends AppCompatActivity {
         });
     }
     public void delete(String hID) {
-
+        databaseReference.child(hID).removeValue();
     }
 }

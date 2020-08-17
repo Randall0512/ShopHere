@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -52,7 +53,7 @@ public class ShoppingViewHolder extends RecyclerView.ViewHolder{
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String s = adapterView.getItemAtPosition(i).toString();
-                int newQuantity = 0;
+                mClicklistener.onChangeQuantity(view, getAdapterPosition(), s);
             }
 
             @Override
@@ -104,6 +105,7 @@ public class ShoppingViewHolder extends RecyclerView.ViewHolder{
         void onDeleteClick(View view, int position);
         void onItemClick(View view, int position);
         void onItemLongClick(View view, int position);
+        void onChangeQuantity(View view, int position, String quantityNum);
     }
     public void setOnclickListener(ShoppingViewHolder.ClickListener clickListener){
         mClicklistener = clickListener;

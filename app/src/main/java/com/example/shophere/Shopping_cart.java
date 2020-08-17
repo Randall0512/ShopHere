@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +32,7 @@ public class Shopping_cart extends AppCompatActivity {
     ConstraintLayout bil;
     ScrollView list;
     String currentUserID, shoppingID;
-    String pn,pi;
+    String pn,pi, message;;
     double totalPrice;
     int numStock, totalItem;
     FirebaseAuth mFirebaseAuth;
@@ -57,6 +58,67 @@ public class Shopping_cart extends AppCompatActivity {
         item = (TextView) findViewById(R.id.numSubtotal);
         tolPrice = (TextView) findViewById(R.id.SubTotalPrice);
 
+        // Bottom Navigation
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setSelectedItemId(R.id.nav_shopping_cart);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+    }
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            switch (item.getItemId()){
+                case R.id.nav_home:
+                    Intent choose = new Intent(Shopping_cart.this, MainStore.class);
+                    startActivity(choose);
+                    break;
+                case R.id.nav_restore:
+                    Intent history = new Intent(Shopping_cart.this, PurchaseHistory.class);
+                    startActivity(history);
+                    break;
+                case R.id.nav_shopping_cart:
+                    break;
+                case R.id.nav_menu:
+                    Intent menu = new Intent(Shopping_cart.this, MenuBar.class);
+                    startActivity(menu);
+                    break;
+            }
+            return true;
+        }
+    };
+    public void delete( String sID){
+        databaseReference.child(sID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    double pri = dataSnapshot.child("product_price").getValue(double.class);
+                    int quan = dataSnapshot.child("quantity").getValue(int.class);
+                    totalItem -= quan;
+                    totalPrice -= pri * quan;
+                    String it;
+                    if (totalItem > 1) {
+                        it = " item ) ";
+                    } else {
+                        it = " items ) ";
+                    }
+                    item.setText("( " + String.valueOf(totalItem) + it);
+                    tolPrice.setText(String.format("RM %.2f", totalPrice));
+                }else {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference.child(sID).removeValue();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         totalItem = 0;
         totalPrice = 0.00;
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -129,74 +191,36 @@ public class Shopping_cart extends AppCompatActivity {
                             }
                             @Override
                             public void onItemLongClick(View view, int position) {
-
+                                String productID = getItem(position).getProduct_id();
+                                String first = productID.substring(0, 2);
+                                switch (first){
+                                    case "PV":
+                                        message = "videogames";
+                                        break;
+                                }
+                                Intent intent = new Intent(view.getContext(), ProductOverview.class);
+                                intent.putExtra("id", productID);
+                                intent.putExtra("type", message);
+                                intent.putExtra("quan", getItem(position).getQuantity());
+                                intent.putExtra("shoppingID", getItem(position).getShoppingCart_id());
+                                startActivity(intent);
                             }
                             @Override
                             public void onDeleteClick(View view, int position) {
                                 shoppingID = getItem(position).getShoppingCart_id();
                                 delete(shoppingID);
                             }
+                            @Override
+                            public void onChangeQuantity(View view, int position, String quantityNum){
+                                String productID = getItem(position).getProduct_id();
+                                String SC = getItem(position).getShoppingCart_id();
+                                databaseReference.child(SC).child("quantity").setValue(Integer.valueOf(quantityNum));
+                                //Toast.makeText(Shopping_cart.this, productID,Toast.LENGTH_SHORT).show();
+                            }
                         });
                         return viewHolder;
                     }
                 };
         recyclerView.setAdapter(firebaseRecyclerAdapter);
-
-        // Bottom Navigation
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setSelectedItemId(R.id.nav_shopping_cart);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
-    }
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-            switch (item.getItemId()){
-                case R.id.nav_home:
-                    Intent choose = new Intent(Shopping_cart.this, MainStore.class);
-                    startActivity(choose);
-                    break;
-                case R.id.nav_restore:
-                    Intent history = new Intent(Shopping_cart.this, PurchaseHistory.class);
-                    startActivity(history);
-                    break;
-                case R.id.nav_shopping_cart:
-                    break;
-                case R.id.nav_menu:
-                    Intent menu = new Intent(Shopping_cart.this, MenuBar.class);
-                    startActivity(menu);
-                    break;
-            }
-            return true;
-        }
-    };
-    public void delete( String sID){
-        databaseReference.child(sID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    double pri = dataSnapshot.child("product_price").getValue(double.class);
-                    int quan = dataSnapshot.child("quantity").getValue(int.class);
-                    totalItem -= quan;
-                    totalPrice -= pri * quan;
-                    String it;
-                    if (totalItem > 1) {
-                        it = " item ) ";
-                    } else {
-                        it = " items ) ";
-                    }
-                    item.setText("( " + String.valueOf(totalItem) + it);
-                    tolPrice.setText(String.format("RM %.2f", totalPrice));
-                }else {
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        databaseReference.child(sID).removeValue();
     }
 }

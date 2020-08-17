@@ -65,6 +65,8 @@ public class Categories extends AppCompatActivity {
                     startActivity(shopping);
                     break;
                 case R.id.nav_menu:
+                    Intent menu = new Intent(Categories.this, MenuBar.class);
+                    startActivity(menu);
                     break;
             }
             return true;
@@ -98,7 +100,7 @@ public class Categories extends AppCompatActivity {
                                 Intent intent = new Intent(view.getContext(), ProductOverview.class);
                                 intent.putExtra("id", mid);
                                 intent.putExtra("type", message);
-                                startActivity(intent);;
+                                startActivity(intent);
                             }
                             @Override
                             public void onItemLongClick(View view, int position) {

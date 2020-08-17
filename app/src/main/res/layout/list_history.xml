@@ -34,24 +34,10 @@
                 android:paddingLeft="10dp">
 
                 <TextView
-                    android:id="@+id/shoppingID"
+                    android:id="@+id/histID"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Shopping ID"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/productID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="ID"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/quan"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="ID"
+                    android:text="History ID"
                     android:visibility="gone" />
 
                 <TextView
@@ -84,8 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/quantity_text"
-                android:textSize="14sp"
-                android:visibility="visible" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/quanti"

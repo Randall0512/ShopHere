@@ -22,21 +22,18 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class payment_detail extends AppCompatActivity {
-    String pid;
+    String pid, user_ID;
     int quantity, ProductQuantity;
     double ProductPrice, totalPrice;
 
-    private ArrayList<String> arrayList = new ArrayList<>();
-    private ArrayList<String> arrayList2 = new ArrayList<>();
-    Spinner spinner,spinner2;
     Button buy;
     TextView p, cancel;
     CardEditText cardnum;
-    int num;
+    int num, gotShp;
 
     FirebaseAuth mFirebaseAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    DatabaseReference databaseReference, dr, findNumHistory, myHistory;
+    DatabaseReference databaseReference, dr, findNumHistory, myHistory, myAllHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +43,11 @@ public class payment_detail extends AppCompatActivity {
         p = (TextView)findViewById(R.id.priID);
         cancel = (TextView)findViewById(R.id.cancel);
         cardnum = findViewById(R.id.bt_card_form_card_number);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        user_ID = mFirebaseAuth.getCurrentUser().getUid();
 
         pid = getIntent().getStringExtra("productid");
+        gotShp = getIntent().getIntExtra("gotShopping",0);
         if(pid != null) {
             quantity = getIntent().getIntExtra("quan", 0);
         }
@@ -69,13 +69,16 @@ public class payment_detail extends AppCompatActivity {
             public void onClick(View view) {
                 String cardNum = String.valueOf(cardnum.getText());
                 String cardType = cardnum.getCardType().name();
-                if(cardType == null || cardType == "UNKNOWN"){
+                if(cardType == "UNKNOWN"){
                     Toast.makeText(payment_detail.this, "Credit Card UNKNOWN !!!", Toast.LENGTH_SHORT).show();
+                }else if(cardType == "EMPTY"){
+                    Toast.makeText(payment_detail.this, "Credit Card EMPTY !!!", Toast.LENGTH_SHORT).show();
+                }else if(cardNum == null){
+                    Toast.makeText(payment_detail.this, " UNKNOWN !!!", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(payment_detail.this, "We are under construction!!!", Toast.LENGTH_SHORT).show();
                     String history_id = "H" + (num);
-                    String userID = mFirebaseAuth.getCurrentUser().getUid();
-                    myHistory = firebaseDatabase.getReference("users").child(userID).child("history").child(history_id);
+                    myHistory = firebaseDatabase.getReference("users").child(user_ID).child("history").child(history_id);
                     myHistory.child("history_id").setValue(history_id);
                     myHistory.child("product_id").setValue(pid);
                     myHistory.child("quantity").setValue(quantity);
@@ -87,11 +90,24 @@ public class payment_detail extends AppCompatActivity {
                     intent.putExtra("history", history_id);
                     intent.putExtra("productID", pid);
                     intent.putExtra("qt", quantity);
+                    myAllHistory = firebaseDatabase.getReference("AllHistory").child(history_id);
+                    myAllHistory.child("history_id").setValue(history_id);
+                    myAllHistory.child("customer_id").setValue(user_ID);
+                    myAllHistory.child("product_id").setValue(pid);
+                    myAllHistory.child("quantity").setValue(quantity);
+                    myAllHistory.child("payment_price").setValue(totalPrice);
+
+                    if (gotShp != 0 ){
+                        String shopID = getIntent().getStringExtra("shoppingID");
+                        firebaseDatabase.getReference("users").child(user_ID).child("shopping_cart").child(shopID).removeValue();
+                    }
                     finish();
                     startActivity(intent);
                 }
             }
         });
+
+
     }
 
     @Override
