@@ -16,6 +16,12 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,6 +30,8 @@ public class ShoppingViewHolder extends RecyclerView.ViewHolder{
     View view;
     Button del;
     Spinner quanChange;
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private ArrayList<String> arrayList = new ArrayList<>();
     public ShoppingViewHolder (@NonNull View itemView) {
         super(itemView);
@@ -48,7 +56,8 @@ public class ShoppingViewHolder extends RecyclerView.ViewHolder{
                 mClicklistener.onDeleteClick(view, getAdapterPosition());
             }
         });
-        quanChange = view.findViewById(R.id.id_quantity);
+
+        quanChange = view.findViewById(R.id.spinner);
         quanChange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -61,6 +70,7 @@ public class ShoppingViewHolder extends RecyclerView.ViewHolder{
 
             }
         });
+
     }
     public void setShopping(Context ct, String pID, String sID, int quantity, String pn, String pi, double pp, int numStock){
         CardView have = view.findViewById(R.id.card);
@@ -71,20 +81,20 @@ public class ShoppingViewHolder extends RecyclerView.ViewHolder{
         TextView text_productPrice = view.findViewById(R.id.productPrice);
         ImageView image_product = view.findViewById(R.id.productImage);
         TextView text_quantity = view.findViewById(R.id.textQuantity);
-        TextView num_quantity = view.findViewById(R.id.quan);
-        Spinner spinner = view.findViewById(R.id.id_quantity);
+        Spinner spinner = view.findViewById(R.id.spinner);
 
         text_productID.setText(pID);
         text_shoppingID.setText(sID);
-        num_quantity.setText(String.valueOf(quantity));
         text_productName.setText(pn);
         text_productPrice.setText(String.format("RM %.2f", pp));
         Picasso.get().load(pi).into(image_product);
-        if(numStock == 0){
+        if(numStock <= 0){
             text_quantity.setVisibility(View.GONE);
             spinner.setVisibility(View.GONE);
             arrayList.clear();
             arrayList.add(String.valueOf(0));
+            // haven test
+            firebaseDatabase.getReference("users").child(user).child("shopping_cart").child(sID).child("quantity").setValue(0);
         }else{
             text_quantity.setVisibility(View.VISIBLE);
             spinner.setVisibility(View.VISIBLE);
@@ -92,10 +102,13 @@ public class ShoppingViewHolder extends RecyclerView.ViewHolder{
             for (int i = 1; i<=numStock; i++){
                 arrayList.add(String.valueOf(i));
             }
+
         }
+
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(ct, R.layout.style_spinner, arrayList);
         spinner.setAdapter(arrayAdapter);
         spinner.setSelection(quantity-1);
+
 
         Animation animation = AnimationUtils.loadAnimation(ct, android.R.anim.slide_in_left);
         itemView.startAnimation(animation);

@@ -19,21 +19,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 
 public class payment_detail extends AppCompatActivity {
-    String pid, user_ID;
+    String pid, user_ID, history_id, product_id;
     int quantity, ProductQuantity;
-    double ProductPrice, totalPrice;
+    double ProductPrice, totalPrice, subPrice;
 
     Button buy;
     TextView p, cancel;
     CardEditText cardnum;
-    int num, gotShp;
+    int num, gotShp, buyAll, quan, leftStock, pq;
 
     FirebaseAuth mFirebaseAuth;
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    DatabaseReference databaseReference, dr, findNumHistory, myHistory, myAllHistory;
+    DatabaseReference databaseReference, dr, dr2, findNumHistory, myHistory, myAllHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +45,41 @@ public class payment_detail extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         user_ID = mFirebaseAuth.getCurrentUser().getUid();
 
-        pid = getIntent().getStringExtra("productid");
-        gotShp = getIntent().getIntExtra("gotShopping",0);
-        if(pid != null) {
-            quantity = getIntent().getIntExtra("quan", 0);
+        buyAll = getIntent().getIntExtra("buyAll",0);
+        if (buyAll != 0){
+            subPrice = getIntent().getDoubleExtra("subPrice",0);
+            p.setText(String.format("RM %.2f", subPrice));
+
+        }else{
+            pid = getIntent().getStringExtra("productid");
+            gotShp = getIntent().getIntExtra("gotShopping",0);
+            if(pid != null) {
+                quantity = getIntent().getIntExtra("quan", 0);
+            }
+            String checkProduct = pid.substring(0, 2);
+            switch (checkProduct) {
+                case "PV":
+                    dr = firebaseDatabase.getReference("product_videogames");
+            }
+            databaseReference = dr.child(pid);
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    ProductPrice = dataSnapshot.child("product_price").getValue(double.class);
+                    ProductQuantity = dataSnapshot.child("product_stock").getValue(int.class);
+
+                    totalPrice = ProductPrice * quantity;
+                    p.setText(String.format("RM %.2f", totalPrice));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
 
-        String checkProduct = pid.substring(0, 2);
-        switch (checkProduct) {
-            case "PV":
-                dr = firebaseDatabase.getReference("product_videogames");
-        }
-        databaseReference = dr.child(pid);
+
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,60 +97,108 @@ public class payment_detail extends AppCompatActivity {
                     Toast.makeText(payment_detail.this, "Credit Card EMPTY !!!", Toast.LENGTH_SHORT).show();
                 }else if(cardNum == null){
                     Toast.makeText(payment_detail.this, " UNKNOWN !!!", Toast.LENGTH_SHORT).show();
+                }else if(cardNum.length()!=16){
+                    Toast.makeText(payment_detail.this, " 16 Number of Credit Card !!!", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(payment_detail.this, "We are under construction!!!", Toast.LENGTH_SHORT).show();
-                    String history_id = "H" + (num);
-                    myHistory = firebaseDatabase.getReference("users").child(user_ID).child("history").child(history_id);
-                    myHistory.child("history_id").setValue(history_id);
-                    myHistory.child("product_id").setValue(pid);
-                    myHistory.child("quantity").setValue(quantity);
-                    myHistory.child("payment_price").setValue(totalPrice);
-                    int leftStock = ProductQuantity - quantity;
-                    databaseReference.child("product_stock").setValue(leftStock);
-                    firebaseDatabase.getReference("IDNumStore").child("historyNum").setValue(num);
-                    Intent intent = new Intent(payment_detail.this, PaymentComplete.class);
-                    intent.putExtra("history", history_id);
-                    intent.putExtra("productID", pid);
-                    intent.putExtra("qt", quantity);
-                    myAllHistory = firebaseDatabase.getReference("AllHistory").child(history_id);
-                    myAllHistory.child("history_id").setValue(history_id);
-                    myAllHistory.child("customer_id").setValue(user_ID);
-                    myAllHistory.child("product_id").setValue(pid);
-                    myAllHistory.child("quantity").setValue(quantity);
-                    myAllHistory.child("payment_price").setValue(totalPrice);
+                    if (buyAll != 0) {
+                        databaseReference = firebaseDatabase.getReference("users").child(user_ID).child("shopping_cart");
+                        databaseReference.orderByChild("shoppingCart_id").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
 
-                    if (gotShp != 0 ){
-                        String shopID = getIntent().getStringExtra("shoppingID");
-                        firebaseDatabase.getReference("users").child(user_ID).child("shopping_cart").child(shopID).removeValue();
+                                    history_id = "H" + (num);
+                                    product_id = childSnapshot.child("product_id").getValue(String.class);
+                                    quan = childSnapshot.child("quantity").getValue(int.class);
+                                    double product_price = childSnapshot.child("product_price").getValue(double.class);
+
+                                    myHistory = firebaseDatabase.getReference("users").child(user_ID).child("history").child(history_id);
+                                    myHistory.child("history_id").setValue(history_id);
+                                    myHistory.child("product_id").setValue(product_id);
+                                    myHistory.child("quantity").setValue(quan);
+                                    double totPri = quan * product_price;
+                                    myHistory.child("payment_price").setValue(totPri);
+
+                                    myAllHistory = firebaseDatabase.getReference("AllHistory").child(history_id);
+                                    myAllHistory.child("history_id").setValue(history_id);
+                                    myAllHistory.child("customer_id").setValue(user_ID);
+                                    myAllHistory.child("product_id").setValue(product_id);
+                                    myAllHistory.child("quantity").setValue(quan);
+                                    myAllHistory.child("payment_price").setValue(totPri);
+
+                                    String first = product_id.substring(0, 2);
+                                    switch (first) {
+                                        case "PV":
+                                            dr2 = firebaseDatabase.getReference("product_videogames");
+                                    }
+                                    dr2.child(product_id).child("product_stock").addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            pq = dataSnapshot.getValue(int.class);
+                                            leftStock = pq - quan;
+                                            dataSnapshot.getRef().setValue(leftStock);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                    firebaseDatabase.getReference("IDNumStore").child("historyNum").setValue(num);
+                                    num++;
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        firebaseDatabase.getReference("users").child(user_ID).child("shopping_cart").removeValue();
+                        finish();
+                        //Intent n = new Intent(payment_detail.this, PurchaseHistory.class);
+                        //startActivity(n);
+                    }else{
+                        history_id = "H" + (num);
+                        myHistory = firebaseDatabase.getReference("users").child(user_ID).child("history").child(history_id);
+                        myHistory.child("history_id").setValue(history_id);
+                        myHistory.child("product_id").setValue(pid);
+                        myHistory.child("quantity").setValue(quantity);
+                        myHistory.child("payment_price").setValue(totalPrice);
+                        int leftStock = ProductQuantity - quantity;
+                        databaseReference.child("product_stock").setValue(leftStock);
+                        firebaseDatabase.getReference("IDNumStore").child("historyNum").setValue(num);
+                        Intent intent = new Intent(payment_detail.this, PaymentComplete.class);
+                        intent.putExtra("history", history_id);
+                        intent.putExtra("productID", pid);
+                        intent.putExtra("qt", quantity);
+                        myAllHistory = firebaseDatabase.getReference("AllHistory").child(history_id);
+                        myAllHistory.child("history_id").setValue(history_id);
+                        myAllHistory.child("customer_id").setValue(user_ID);
+                        myAllHistory.child("product_id").setValue(pid);
+                        myAllHistory.child("quantity").setValue(quantity);
+                        myAllHistory.child("payment_price").setValue(totalPrice);
+
+                        if (gotShp != 0 ){
+                            String shopID = getIntent().getStringExtra("shoppingID");
+                            firebaseDatabase.getReference("users").child(user_ID).child("shopping_cart").child(shopID).removeValue();
+                        }
+                        finish();
+                        startActivity(intent);
                     }
-                    finish();
-                    startActivity(intent);
                 }
             }
         });
 
 
     }
-
     @Override
     protected void onStart() {
         super.onStart();
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ProductPrice = dataSnapshot.child("product_price").getValue(double.class);
-                ProductQuantity = dataSnapshot.child("product_stock").getValue(int.class);
-
-                totalPrice = ProductPrice * quantity;
-                p.setText(String.format("RM %.2f", totalPrice));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
         findNumHistory = firebaseDatabase.getReference("IDNumStore").child("historyNum");
         findNumHistory.addValueEventListener(new ValueEventListener() {
             @Override

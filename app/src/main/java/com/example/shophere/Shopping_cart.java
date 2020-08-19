@@ -1,5 +1,6 @@
 package com.example.shophere;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,7 +34,7 @@ public class Shopping_cart extends AppCompatActivity {
     ConstraintLayout bil;
     ScrollView list;
     String currentUserID, shoppingID;
-    String pn,pi, message;;
+    String pn,pi, message;
     double totalPrice;
     int numStock, totalItem;
     FirebaseAuth mFirebaseAuth;
@@ -119,8 +121,6 @@ public class Shopping_cart extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        totalItem = 0;
-        totalPrice = 0.00;
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -161,17 +161,6 @@ public class Shopping_cart extends AppCompatActivity {
                                 pn = dataSnapshot.child("product_name").getValue(String.class);
                                 pi = dataSnapshot.child("product_image").getValue(String.class);
                                 numStock = dataSnapshot.child("product_stock").getValue(int.class);
-                                totalItem += product.getQuantity();
-                                totalPrice += product.getQuantity() * product.getProduct_price();
-
-                                String it;
-                                if (totalItem > 1) {
-                                    it = " item ) ";
-                                } else {
-                                    it = " items ) ";
-                                }
-                                item.setText("( " + String.valueOf(totalItem) + it);
-                                tolPrice.setText(String.format("RM %.2f", totalPrice));
                                 shoppingViewHolder.setShopping(getApplicationContext(), product.getProduct_id(), product.getShoppingCart_id(), product.getQuantity(), pn, pi, product.getProduct_price(), numStock);
                             }
 
@@ -208,19 +197,104 @@ public class Shopping_cart extends AppCompatActivity {
                             @Override
                             public void onDeleteClick(View view, int position) {
                                 shoppingID = getItem(position).getShoppingCart_id();
-                                delete(shoppingID);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(Shopping_cart.this);
+                                builder.setMessage("Are you sure you want DELETE this item?").setCancelable(false)
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                delete(shoppingID);
+                                            }
+                                        })
+                                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                dialogInterface.cancel();
+                                            }
+                                        });
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
+
                             }
+
                             @Override
                             public void onChangeQuantity(View view, int position, String quantityNum){
                                 String productID = getItem(position).getProduct_id();
                                 String SC = getItem(position).getShoppingCart_id();
                                 databaseReference.child(SC).child("quantity").setValue(Integer.valueOf(quantityNum));
-                                //Toast.makeText(Shopping_cart.this, productID,Toast.LENGTH_SHORT).show();
+
                             }
+
                         });
                         return viewHolder;
                     }
                 };
         recyclerView.setAdapter(firebaseRecyclerAdapter);
+        databaseReference.orderByChild("shoppingCart_id").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                totalItem = 0;
+                totalPrice = 0.00;
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    int quan = childSnapshot.child("quantity").getValue(int.class);
+                    double pric = childSnapshot.child("product_price").getValue(double.class);
+                    totalItem += quan;
+                    totalPrice += pric * quan;
+                    String it;
+                    if (totalItem < 1) {
+                        it = " item ) ";
+                    } else {
+                        it = " items ) ";
+                    }
+                    item.setText("( " + String.valueOf(totalItem) + it);
+                    tolPrice.setText(String.format("RM %.2f", totalPrice));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void onClickBuy(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(Shopping_cart.this);
+        builder.setMessage("Are you sure you want BUY ALL Item?").setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        /* haven test
+                        databaseReference.orderByChild("shoppingCart_id").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
+                                    //sid = childSnapshot.child("shoppingCart_id").getValue(String.class);
+                                    int q = childSnapshot.child("quantity").getValue(int.class);
+                                    if(q <=0){
+                                        childSnapshot.removeValue();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                         */
+                        Intent intent=new Intent(Shopping_cart.this, payment_detail.class);
+                        intent.putExtra("buyAll", 1);
+                        intent.putExtra("subPrice",totalPrice);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
     }
 }

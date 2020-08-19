@@ -110,7 +110,6 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="30dp"
                 android:paddingTop="10dp"
-                android:text="hi"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />

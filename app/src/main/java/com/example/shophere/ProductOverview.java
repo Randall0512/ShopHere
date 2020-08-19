@@ -185,9 +185,7 @@ public class ProductOverview extends AppCompatActivity {
         finish();
     }
     public void onBuyNow(View view){
-        if(gotQuan != 0) {
 
-        }
         Intent intent=new Intent(ProductOverview.this, payment_detail.class);
         String productID = id.getText().toString();
         int quan = Integer.parseInt(q.getSelectedItem().toString());
@@ -197,7 +195,7 @@ public class ProductOverview extends AppCompatActivity {
             intent.putExtra("gotShopping", 1);
             intent.putExtra("shoppingID", shopID);
         }
+        finish();
         startActivity(intent);
-
     }
 }
