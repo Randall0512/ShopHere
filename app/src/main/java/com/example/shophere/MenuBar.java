@@ -125,6 +125,14 @@ public class MenuBar extends AppCompatActivity {
                 break;
         }
     }
+    public void onClickYourOrder(View view) {
+        Intent shopping = new Intent(MenuBar.this, Shopping_cart.class);
+        startActivity(shopping);
+    }
+    public void onClickPurchaseHistory(View view) {
+        Intent history = new Intent(MenuBar.this, PurchaseHistory.class);
+        startActivity(history);
+    }
     public void onClickShopCategories(View view){
         lSBC = findViewById(R.id.layout_shopbycategories);
         if (bSC){
