@@ -151,8 +151,36 @@ public class Shopping_cart extends AppCompatActivity {
                     public void populateViewHolder(final ShoppingViewHolder shoppingViewHolder, final product_ShoppingCart product, int i) {
                         String checkProduct = product.getProduct_id().substring(0, 2);
                         switch (checkProduct) {
+                            case "PA":
+                                dr = firebaseDatabase.getReference("product_artcraft");
+                                break;
+                            case "PB":
+                                dr = firebaseDatabase.getReference("product_book");
+                                break;
+                            case "PC":
+                                dr = firebaseDatabase.getReference("product_computer");
+                                break;
+                            case "PF":
+                                dr = firebaseDatabase.getReference("product_fashion");
+                                break;
+                            case "PH":
+                                dr = firebaseDatabase.getReference("product_healthhousehold");
+                                break;
+                            case "PK":
+                                dr = firebaseDatabase.getReference("product_homekitchen");
+                                break;
+                            case "PM":
+                                dr = firebaseDatabase.getReference("product_movietelevision");
+                                break;
+                            case "PP":
+                                dr = firebaseDatabase.getReference("product_petsupplies");
+                                break;
+                            case "PS":
+                                dr = firebaseDatabase.getReference("product_software");
+                                break;
                             case "PV":
                                 dr = firebaseDatabase.getReference("product_videogames");
+                                break;
                         }
                         dRef = dr.child(product.getProduct_id());
                         dRef.addValueEventListener(new ValueEventListener() {
@@ -183,6 +211,33 @@ public class Shopping_cart extends AppCompatActivity {
                                 String productID = getItem(position).getProduct_id();
                                 String first = productID.substring(0, 2);
                                 switch (first){
+                                    case "PA":
+                                        message = "artcraft";
+                                        break;
+                                    case "PB":
+                                        message = "books";
+                                        break;
+                                    case "PC":
+                                        message = "computers";
+                                        break;
+                                    case "PF":
+                                        message = "fashion";
+                                        break;
+                                    case "PH":
+                                        message = "healthhousehold";
+                                        break;
+                                    case "PK":
+                                        message = "homekitchen";
+                                        break;
+                                    case "PM":
+                                        message = "movietelevision";
+                                        break;
+                                    case "PP":
+                                        message = "petsupplies";
+                                        break;
+                                    case "PS":
+                                        message = "software";
+                                        break;
                                     case "PV":
                                         message = "videogames";
                                         break;
@@ -235,18 +290,20 @@ public class Shopping_cart extends AppCompatActivity {
                 totalItem = 0;
                 totalPrice = 0.00;
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    int quan = childSnapshot.child("quantity").getValue(int.class);
-                    double pric = childSnapshot.child("product_price").getValue(double.class);
-                    totalItem += quan;
-                    totalPrice += pric * quan;
-                    String it;
-                    if (totalItem < 1) {
-                        it = " item ) ";
-                    } else {
-                        it = " items ) ";
+                    if(childSnapshot.child("quantity").exists() && childSnapshot.child("product_price").exists()) {
+                        int quan = childSnapshot.child("quantity").getValue(int.class);
+                        double pric = childSnapshot.child("product_price").getValue(double.class);
+                        totalItem += quan;
+                        totalPrice += pric * quan;
+                        String it;
+                        if (totalItem < 1) {
+                            it = " item ) ";
+                        } else {
+                            it = " items ) ";
+                        }
+                        item.setText("( " + String.valueOf(totalItem) + it);
+                        tolPrice.setText(String.format("RM %.2f", totalPrice));
                     }
-                    item.setText("( " + String.valueOf(totalItem) + it);
-                    tolPrice.setText(String.format("RM %.2f", totalPrice));
                 }
             }
 
@@ -262,15 +319,13 @@ public class Shopping_cart extends AppCompatActivity {
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        /* haven test
                         databaseReference.orderByChild("shoppingCart_id").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for(DataSnapshot childSnapshot : dataSnapshot.getChildren()){
-                                    //sid = childSnapshot.child("shoppingCart_id").getValue(String.class);
                                     int q = childSnapshot.child("quantity").getValue(int.class);
                                     if(q <=0){
-                                        childSnapshot.removeValue();
+                                        childSnapshot.getRef().removeValue();
                                     }
                                 }
                             }
@@ -280,7 +335,6 @@ public class Shopping_cart extends AppCompatActivity {
 
                             }
                         });
-                         */
                         Intent intent=new Intent(Shopping_cart.this, payment_detail.class);
                         intent.putExtra("buyAll", 1);
                         intent.putExtra("subPrice",totalPrice);

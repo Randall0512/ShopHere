@@ -115,8 +115,36 @@ public class PurchaseHistory extends AppCompatActivity {
                     public void populateViewHolder(final HistoryViewHolder historyViewHolder, final product_history product, int i) {
                         String checkProduct = product.getProduct_id().substring(0, 2);
                         switch (checkProduct) {
+                            case "PA":
+                                dr = firebaseDatabase.getReference("product_artcraft");
+                                break;
+                            case "PB":
+                                dr = firebaseDatabase.getReference("product_book");
+                                break;
+                            case "PC":
+                                dr = firebaseDatabase.getReference("product_computer");
+                                break;
+                            case "PF":
+                                dr = firebaseDatabase.getReference("product_fashion");
+                                break;
+                            case "PH":
+                                dr = firebaseDatabase.getReference("product_healthhousehold");
+                                break;
+                            case "PK":
+                                dr = firebaseDatabase.getReference("product_homekitchen");
+                                break;
+                            case "PM":
+                                dr = firebaseDatabase.getReference("product_movietelevision");
+                                break;
+                            case "PP":
+                                dr = firebaseDatabase.getReference("product_petsupplies");
+                                break;
+                            case "PS":
+                                dr = firebaseDatabase.getReference("product_software");
+                                break;
                             case "PV":
                                 dr = firebaseDatabase.getReference("product_videogames");
+                                break;
                         }
                         dRef = dr.child(product.getProduct_id());
                         dRef.addValueEventListener(new ValueEventListener() {

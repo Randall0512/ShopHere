@@ -88,13 +88,21 @@ public class ShoppingViewHolder extends RecyclerView.ViewHolder{
         text_productName.setText(pn);
         text_productPrice.setText(String.format("RM %.2f", pp));
         Picasso.get().load(pi).into(image_product);
-        if(numStock <= 0){
-            text_quantity.setVisibility(View.GONE);
-            spinner.setVisibility(View.GONE);
+        if(numStock == 0){
+            text_quantity.setVisibility(View.INVISIBLE);
+            spinner.setVisibility(View.INVISIBLE);
             arrayList.clear();
             arrayList.add(String.valueOf(0));
-            // haven test
             firebaseDatabase.getReference("users").child(user).child("shopping_cart").child(sID).child("quantity").setValue(0);
+            quantity = 0;
+        }else if(numStock < quantity) {
+            text_quantity.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.VISIBLE);
+            arrayList.clear();
+            for (int i = 1; i<=numStock; i++){
+                arrayList.add(String.valueOf(i));
+            }
+            quantity = numStock;
         }else{
             text_quantity.setVisibility(View.VISIBLE);
             spinner.setVisibility(View.VISIBLE);
@@ -104,11 +112,9 @@ public class ShoppingViewHolder extends RecyclerView.ViewHolder{
             }
 
         }
-
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(ct, R.layout.style_spinner, arrayList);
         spinner.setAdapter(arrayAdapter);
-        spinner.setSelection(quantity-1);
-
+        spinner.setSelection(quantity - 1);
 
         Animation animation = AnimationUtils.loadAnimation(ct, android.R.anim.slide_in_left);
         itemView.startAnimation(animation);

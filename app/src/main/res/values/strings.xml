@@ -94,5 +94,6 @@
     <string name="product_details_text">Product Details</string>
     <!-- Purchase History -->
     <string name="no_history">No Item In your History</string>
+    <string name="no_item_categories">No Item In this Categories</string>
 
 </resources>

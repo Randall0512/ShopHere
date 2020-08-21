@@ -58,8 +58,36 @@ public class payment_detail extends AppCompatActivity {
             }
             String checkProduct = pid.substring(0, 2);
             switch (checkProduct) {
+                case "PA":
+                    dr = firebaseDatabase.getReference("product_artcraft");
+                    break;
+                case "PB":
+                    dr = firebaseDatabase.getReference("product_book");
+                    break;
+                case "PC":
+                    dr = firebaseDatabase.getReference("product_computer");
+                    break;
+                case "PF":
+                    dr = firebaseDatabase.getReference("product_fashion");
+                    break;
+                case "PH":
+                    dr = firebaseDatabase.getReference("product_healthhousehold");
+                    break;
+                case "PK":
+                    dr = firebaseDatabase.getReference("product_homekitchen");
+                    break;
+                case "PM":
+                    dr = firebaseDatabase.getReference("product_movietelevision");
+                    break;
+                case "PP":
+                    dr = firebaseDatabase.getReference("product_petsupplies");
+                    break;
+                case "PS":
+                    dr = firebaseDatabase.getReference("product_software");
+                    break;
                 case "PV":
                     dr = firebaseDatabase.getReference("product_videogames");
+                    break;
             }
             databaseReference = dr.child(pid);
             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -129,6 +157,33 @@ public class payment_detail extends AppCompatActivity {
 
                                     String first = product_id.substring(0, 2);
                                     switch (first) {
+                                        case "PA":
+                                            dr2 = firebaseDatabase.getReference("product_artcraft");
+                                            break;
+                                        case "PB":
+                                            dr2 = firebaseDatabase.getReference("product_book");
+                                            break;
+                                        case "PC":
+                                            dr2 = firebaseDatabase.getReference("product_computer");
+                                            break;
+                                        case "PF":
+                                            dr2 = firebaseDatabase.getReference("product_fashion");
+                                            break;
+                                        case "PH":
+                                            dr2 = firebaseDatabase.getReference("product_healthhousehold");
+                                            break;
+                                        case "PK":
+                                            dr2 = firebaseDatabase.getReference("product_homekitchen");
+                                            break;
+                                        case "PM":
+                                            dr2 = firebaseDatabase.getReference("product_movietelevision");
+                                            break;
+                                        case "PP":
+                                            dr2 = firebaseDatabase.getReference("product_petsupplies");
+                                            break;
+                                        case "PS":
+                                            dr2 = firebaseDatabase.getReference("product_software");
+                                            break;
                                         case "PV":
                                             dr2 = firebaseDatabase.getReference("product_videogames");
                                     }

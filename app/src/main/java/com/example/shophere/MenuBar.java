@@ -78,49 +78,46 @@ public class MenuBar extends AppCompatActivity {
         Intent page = new Intent(MenuBar.this, Categories.class);
         switch (view.getId()){
             case R.id.ArtCraft:
-                //page = new Intent(MenuBar.this, <?>.class);
-                //startActivity(page);
+                page.putExtra(EXTRA_MESSAGE, "artcraft");
+                startActivityForResult(page, TEXT_REQUEST);
                 Toast.makeText(MenuBar.this, "Art Craft !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.books:
-                //page = new Intent(MenuBar.this, <?>.class);
-                //startActivity(page);
+                page.putExtra(EXTRA_MESSAGE, "books");
+                startActivityForResult(page, TEXT_REQUEST);
                 Toast.makeText(MenuBar.this, "Books !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.computers:
-                //page = new Intent(MenuBar.this, <?>.class);
-                //startActivity(page);
+                page.putExtra(EXTRA_MESSAGE, "computers");
+                startActivityForResult(page, TEXT_REQUEST);
                 Toast.makeText(MenuBar.this, "Computers !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fashion:
-                //page = new Intent(MenuBar.this, <?>.class);
-                //startActivity(page);
+                page.putExtra(EXTRA_MESSAGE, "fashion");
+                startActivityForResult(page, TEXT_REQUEST);
                 Toast.makeText(MenuBar.this, "Fashion !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.healthHousehold:
-                //page = new Intent(MenuBar.this, <?>.class);
-                //startActivity(page);
+                page.putExtra(EXTRA_MESSAGE, "healthhousehold");
+                startActivityForResult(page, TEXT_REQUEST);
                 Toast.makeText(MenuBar.this, "Health House Hold !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.homeKitchen:
-                //page = new Intent(MenuBar.this, <?>.class);
-                //startActivity(page);
-                Toast.makeText(MenuBar.this, "home Kitchen !!!", Toast.LENGTH_SHORT).show();
+                page.putExtra(EXTRA_MESSAGE, "homekitchen");
+                startActivityForResult(page, TEXT_REQUEST);
                 break;
             case R.id.movieTelevision:
-                //page = new Intent(MenuBar.this, <?>.class);
-                //startActivity(page);
+                page.putExtra(EXTRA_MESSAGE, "movietelevision");
+                startActivityForResult(page, TEXT_REQUEST);
                 Toast.makeText(MenuBar.this, "Movie Television !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.petSupplies:
-                //page = new Intent(MenuBar.this, <?>.class);
-                //startActivity(page);
-                Toast.makeText(MenuBar.this, "Pet Supplies !!!", Toast.LENGTH_SHORT).show();
+                page.putExtra(EXTRA_MESSAGE, "petsupplies");
+                startActivityForResult(page, TEXT_REQUEST);
                 break;
             case R.id.software:
-                //page = new Intent(MenuBar.this, <?>.class);
-                //startActivity(page);
-                Toast.makeText(MenuBar.this, "Software !!!", Toast.LENGTH_SHORT).show();
+                page.putExtra(EXTRA_MESSAGE, "software");
+                startActivityForResult(page, TEXT_REQUEST);
                 break;
             case R.id.videogames:
                 page.putExtra(EXTRA_MESSAGE, "videogames");

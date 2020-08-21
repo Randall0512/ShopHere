@@ -31,8 +31,9 @@ public class ProductOverview extends AppCompatActivity {
     TextView name, price, id, stock, aboutUs, description, detail, featuresNDetails;
     ImageView image;
     Spinner q;
-    int stockQ, i, num, gotQuan;
-    String shopID;
+    int stockQ, i, num, gotQuan, productQuantity, addQ;
+    double pri;
+    String shopID, productID, userID, shoppingCart_id;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private DatabaseReference databaseReference, dataRef, findNumShoppingCart;
     FirebaseAuth mFirebaseAuth;
@@ -59,6 +60,33 @@ public class ProductOverview extends AppCompatActivity {
         String message = getIntent().getStringExtra("type");
         gotQuan = getIntent().getIntExtra("quan", 0);
         switch (message){
+            case "artcraft":
+                databaseReference = firebaseDatabase.getReference("product_artcraft");
+                break;
+            case "books":
+                databaseReference = firebaseDatabase.getReference("product_book");
+                break;
+            case "computers":
+                databaseReference = firebaseDatabase.getReference("product_computer");
+                break;
+            case "fashion":
+                databaseReference = firebaseDatabase.getReference("product_fashion");
+                break;
+            case "healthhousehold":
+                databaseReference = firebaseDatabase.getReference("product_healthhousehold");
+                break;
+            case "homekitchen":
+                databaseReference = firebaseDatabase.getReference("product_homekitchen");
+                break;
+            case "movietelevision":
+                databaseReference = firebaseDatabase.getReference("product_movietelevision");
+                break;
+            case "petsupplies":
+                databaseReference = firebaseDatabase.getReference("product_petsupplies");
+                break;
+            case "software":
+                databaseReference = firebaseDatabase.getReference("product_software");
+                break;
             case "videogames":
                 databaseReference = firebaseDatabase.getReference("product_videogames");
                 break;
@@ -165,29 +193,57 @@ public class ProductOverview extends AppCompatActivity {
     }
     public void onAddCart(View view){
 
-        String userID = mFirebaseAuth.getCurrentUser().getUid();
-        String productID = id.getText().toString();
-        double pri = Double.parseDouble(price.getText().toString().replace("RM ", ""));
-        int productQuantity = Integer.valueOf(q.getSelectedItem().toString());
+        userID = mFirebaseAuth.getCurrentUser().getUid();
+        productID = id.getText().toString();
+        pri = Double.parseDouble(price.getText().toString().replace("RM ", ""));
+        productQuantity = Integer.valueOf(q.getSelectedItem().toString());
         db = FirebaseDatabase.getInstance();
         if(gotQuan != 0){
             myShoppingCart = db.getReference("users").child(userID).child("shopping_cart").child(shopID);
+            myShoppingCart.child("product_id").setValue(productID);
+            myShoppingCart.child("quantity").setValue(productQuantity);
+            myShoppingCart.child("product_price").setValue(pri);
         }else {
-            String shoppingCart_id = "SC" + (num);
-            db.getReference("IDNumStore").child("shoppingCartNum").setValue(num);
-            myShoppingCart = db.getReference("users").child(userID).child("shopping_cart").child(shoppingCart_id);
-            myShoppingCart.child("shoppingCart_id").setValue(shoppingCart_id);
-        }
-        myShoppingCart.child("product_id").setValue(productID);
-        myShoppingCart.child("quantity").setValue(productQuantity);
-        myShoppingCart.child("product_price").setValue(pri);
+            db.getReference("users").child(userID).child("shopping_cart").orderByChild("shoppingCart_id").
+                    addListenerForSingleValueEvent(new ValueEventListener() {
+                                              @Override
+                                              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                  boolean same = false;
+                                                  for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                                      String p = childSnapshot.child("product_id").getValue(String.class);
+                                                      String s = childSnapshot.child("shoppingCart_id").getValue(String.class);
+                                                      int qq = childSnapshot.child("quantity").getValue(int.class);
+                                                      if (p.equals(productID)){
+                                                          same = true;
+                                                          shoppingCart_id = s;
+                                                          addQ = qq;
+                                                      }
+                                                  }
+                                                  if (same){
+                                                      productQuantity += addQ;
+                                                  }else{
+                                                      shoppingCart_id = "SC" + (num);
+                                                      db.getReference("IDNumStore").child("shoppingCartNum").setValue(num);
+                                                  }
+                                                  dataSnapshot.child(shoppingCart_id).child("shoppingCart_id").getRef().setValue(shoppingCart_id);
+                                                  dataSnapshot.child(shoppingCart_id).child("product_id").getRef().setValue(productID);
+                                                  dataSnapshot.child(shoppingCart_id).child("quantity").getRef().setValue(productQuantity);
+                                                  dataSnapshot.child(shoppingCart_id).child("product_price").getRef().setValue(pri);
+                                              }
 
+                                              @Override
+                                              public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                              }
+                                          });
+            
+        }
         finish();
     }
     public void onBuyNow(View view){
 
         Intent intent=new Intent(ProductOverview.this, payment_detail.class);
-        String productID = id.getText().toString();
+        productID = id.getText().toString();
         int quan = Integer.parseInt(q.getSelectedItem().toString());
         intent.putExtra("productid", productID);
         intent.putExtra("quan", quan);

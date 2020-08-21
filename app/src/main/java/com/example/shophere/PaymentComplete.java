@@ -46,6 +46,33 @@ public class PaymentComplete extends AppCompatActivity {
 
         String checkProduct = pdID.substring(0, 2);
         switch (checkProduct) {
+            case "PA":
+                dRef = firebaseDatabase.getReference("product_artcraft");
+                break;
+            case "PB":
+                dRef = firebaseDatabase.getReference("product_book");
+                break;
+            case "PC":
+                dRef = firebaseDatabase.getReference("product_computer");
+                break;
+            case "PF":
+                dRef = firebaseDatabase.getReference("product_fashion");
+                break;
+            case "PH":
+                dRef = firebaseDatabase.getReference("product_healthhousehold");
+                break;
+            case "PK":
+                dRef = firebaseDatabase.getReference("product_homekitchen");
+                break;
+            case "PM":
+                dRef = firebaseDatabase.getReference("product_movietelevision");
+                break;
+            case "PP":
+                dRef = firebaseDatabase.getReference("product_petsupplies");
+                break;
+            case "PS":
+                dRef = firebaseDatabase.getReference("product_software");
+                break;
             case "PV":
                 dRef = firebaseDatabase.getReference("product_videogames");
                 break;
