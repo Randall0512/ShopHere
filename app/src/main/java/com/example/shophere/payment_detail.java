@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.braintreepayments.cardform.view.CardEditText;
+import com.braintreepayments.cardform.view.CvvEditText;
+import com.braintreepayments.cardform.view.ExpirationDateEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +30,8 @@ public class payment_detail extends AppCompatActivity {
     Button buy;
     TextView p, cancel;
     CardEditText cardnum;
+    CvvEditText cardcvv;
+    ExpirationDateEditText cardexp;
     int num, gotShp, buyAll, quan, leftStock, pq;
 
     FirebaseAuth mFirebaseAuth;
@@ -42,6 +46,8 @@ public class payment_detail extends AppCompatActivity {
         p = (TextView)findViewById(R.id.priID);
         cancel = (TextView)findViewById(R.id.cancel);
         cardnum = findViewById(R.id.bt_card_form_card_number);
+        cardcvv = findViewById(R.id.bt_card_form_cvv);
+        cardexp = findViewById(R.id.bt_card_form_expiration);
         mFirebaseAuth = FirebaseAuth.getInstance();
         user_ID = mFirebaseAuth.getCurrentUser().getUid();
 
@@ -119,6 +125,8 @@ public class payment_detail extends AppCompatActivity {
             public void onClick(View view) {
                 String cardNum = String.valueOf(cardnum.getText());
                 String cardType = cardnum.getCardType().name();
+                String cardCVV = cardcvv.getText().toString();
+                String cardExp = cardexp.getText().toString();
                 if(cardType == "UNKNOWN"){
                     Toast.makeText(payment_detail.this, "Credit Card UNKNOWN !!!", Toast.LENGTH_SHORT).show();
                 }else if(cardType == "EMPTY"){
@@ -127,6 +135,14 @@ public class payment_detail extends AppCompatActivity {
                     Toast.makeText(payment_detail.this, " UNKNOWN !!!", Toast.LENGTH_SHORT).show();
                 }else if(cardNum.length()!=16){
                     Toast.makeText(payment_detail.this, " 16 Number of Credit Card !!!", Toast.LENGTH_SHORT).show();
+                }else if(cardExp.isEmpty()){
+                    Toast.makeText(payment_detail.this, "Expiration Date EMPTY !!!", Toast.LENGTH_SHORT).show();
+                }else if(cardExp.length() != 4){
+                    Toast.makeText(payment_detail.this, "Invalid Expiration Date !!!", Toast.LENGTH_SHORT).show();
+                }else if(cardCVV.isEmpty()){
+                    Toast.makeText(payment_detail.this, "CVV EMPTY !!!", Toast.LENGTH_SHORT).show();
+                }else if(cardCVV.length() != 3){
+                    Toast.makeText(payment_detail.this, "Invalid CVV !!!", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(payment_detail.this, "We are under construction!!!", Toast.LENGTH_SHORT).show();
                     if (buyAll != 0) {
