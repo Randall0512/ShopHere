@@ -26,8 +26,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class ProductOverview extends AppCompatActivity {
-    private Spinner spinner;
-    private ArrayList<String> arrayList = new ArrayList<>();
+    private Spinner spinner;// similar to dropdown menu
+    private ArrayList<String> arrayList = new ArrayList<>();//for spinner got more than 1
     TextView name, price, id, stock, aboutUs, description, detail, featuresNDetails;
     ImageView image;
     Spinner q;
@@ -35,7 +35,7 @@ public class ProductOverview extends AppCompatActivity {
     double pri;
     String shopID, productID, userID, shoppingCart_id;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference, dataRef, findNumShoppingCart;
+    private DatabaseReference databaseReference, dataRef, findNumShoppingCart; //got different references on database
     FirebaseAuth mFirebaseAuth;
     FirebaseDatabase db;
     DatabaseReference myShoppingCart;
@@ -56,7 +56,7 @@ public class ProductOverview extends AppCompatActivity {
         detail = (TextView)findViewById(R.id.id_detail);
         featuresNDetails = (TextView)findViewById(R.id.id_featuresndetail);
         q = (Spinner)findViewById(R.id.quantity);
-        String productid = getIntent().getStringExtra("id");
+        String productid = getIntent().getStringExtra("id");//when get specify the type
         String message = getIntent().getStringExtra("type");
         gotQuan = getIntent().getIntExtra("quan", 0);
         switch (message){
@@ -165,7 +165,7 @@ public class ProductOverview extends AppCompatActivity {
                     }
                     ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(ProductOverview.this, R.layout.style_spinner, arrayList);
                     spinner.setAdapter(arrayAdapter);
-                    if(gotQuan != 0){
+                    if(gotQuan != 0){//from shopcart
                         spinner.setSelection(gotQuan-1);
                         shopID = getIntent().getStringExtra("shoppingID");
                     }
@@ -177,8 +177,8 @@ public class ProductOverview extends AppCompatActivity {
 
             }
         });
-        findNumShoppingCart = firebaseDatabase.getReference("IDNumStore").child("shoppingCartNum");
-        findNumShoppingCart.addValueEventListener(new ValueEventListener() {
+        findNumShoppingCart = firebaseDatabase.getReference("IDNumStore").child("shoppingCartNum");// take the database shopcart history id and count the current shop history id consecutively
+        findNumShoppingCart.addValueEventListener(new ValueEventListener() {// no matter how many items u added to shopping cart the shopping cart id
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 num = dataSnapshot.getValue(int.class);
@@ -198,18 +198,18 @@ public class ProductOverview extends AppCompatActivity {
         pri = Double.parseDouble(price.getText().toString().replace("RM ", ""));
         productQuantity = Integer.valueOf(q.getSelectedItem().toString());
         db = FirebaseDatabase.getInstance();
-        if(gotQuan != 0){
-            myShoppingCart = db.getReference("users").child(userID).child("shopping_cart").child(shopID);
-            myShoppingCart.child("product_id").setValue(productID);
-            myShoppingCart.child("quantity").setValue(productQuantity);
-            myShoppingCart.child("product_price").setValue(pri);
+        if(gotQuan != 0){//if items selected exist in the shopcart reference that particular shopcartid and put in all the data here
+                myShoppingCart = db.getReference("users").child(userID).child("shopping_cart").child(shopID);
+                myShoppingCart.child("product_id").setValue(productID);
+                myShoppingCart.child("quantity").setValue(productQuantity);
+                myShoppingCart.child("product_price").setValue(pri);
         }else {
             db.getReference("users").child(userID).child("shopping_cart").orderByChild("shoppingCart_id").
                     addListenerForSingleValueEvent(new ValueEventListener() {
                                               @Override
                                               public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                   boolean same = false;
-                                                  for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                                  for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {//
                                                       String p = childSnapshot.child("product_id").getValue(String.class);
                                                       String s = childSnapshot.child("shoppingCart_id").getValue(String.class);
                                                       int qq = childSnapshot.child("quantity").getValue(int.class);
@@ -222,9 +222,10 @@ public class ProductOverview extends AppCompatActivity {
                                                   if (same){
                                                       productQuantity += addQ;
                                                   }else{
-                                                      shoppingCart_id = "SC" + (num);
+                                                      shoppingCart_id = "SC" + (num);//if the item selected is not exist in the shopping cart then create new shopping cart for the item selected
                                                       db.getReference("IDNumStore").child("shoppingCartNum").setValue(num);
                                                   }
+                                                  //these 4 are used to store data to database
                                                   dataSnapshot.child(shoppingCart_id).child("shoppingCart_id").getRef().setValue(shoppingCart_id);
                                                   dataSnapshot.child(shoppingCart_id).child("product_id").getRef().setValue(productID);
                                                   dataSnapshot.child(shoppingCart_id).child("quantity").getRef().setValue(productQuantity);
@@ -247,7 +248,7 @@ public class ProductOverview extends AppCompatActivity {
         int quan = Integer.parseInt(q.getSelectedItem().toString());
         intent.putExtra("productid", productID);
         intent.putExtra("quan", quan);
-        if(gotQuan != 0) {
+        if(gotQuan != 0) {//from shopcart
             intent.putExtra("gotShopping", 1);
             intent.putExtra("shoppingID", shopID);
         }

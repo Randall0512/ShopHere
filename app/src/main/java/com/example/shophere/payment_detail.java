@@ -242,11 +242,13 @@ public class payment_detail extends AppCompatActivity {
                         int leftStock = ProductQuantity - quantity;
                         databaseReference.child("product_stock").setValue(leftStock);
                         firebaseDatabase.getReference("IDNumStore").child("historyNum").setValue(num);
-                        Intent intent = new Intent(payment_detail.this, PaymentComplete.class);
+
+                        Intent intent = new Intent(payment_detail.this, PaymentComplete.class);//pass data to paymentcomplete
                         intent.putExtra("history", history_id);
                         intent.putExtra("productID", pid);
                         intent.putExtra("qt", quantity);
-                        myAllHistory = firebaseDatabase.getReference("AllHistory").child(history_id);
+
+                        myAllHistory = firebaseDatabase.getReference("AllHistory").child(history_id);//write to database
                         myAllHistory.child("history_id").setValue(history_id);
                         myAllHistory.child("customer_id").setValue(user_ID);
                         myAllHistory.child("product_id").setValue(pid);

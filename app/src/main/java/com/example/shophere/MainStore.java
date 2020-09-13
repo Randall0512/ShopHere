@@ -34,17 +34,17 @@ public class MainStore extends AppCompatActivity {
         setContentView(R.layout.main_store);
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("product_videogames");
+        //firebaseDatabase = FirebaseDatabase.getInstance();
+        //databaseReference = firebaseDatabase.getReference("product_videogames");
 
-        i1 = (ImageView)findViewById(R.id.PI1);
+        i1 = (ImageView)findViewById(R.id.PI1);// image view variables
         i2 = (ImageView)findViewById(R.id.PI2);
         i3 = (ImageView)findViewById(R.id.PI3);
 
         // Bottom Navigation
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setSelectedItemId(R.id.nav_home);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);//detect nav menu from user
     }
 
     @Override
@@ -54,7 +54,7 @@ public class MainStore extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finishAffinity();
-        System.exit(0);
+        System.exit(0);//close app
     }
 
 
@@ -85,13 +85,13 @@ public class MainStore extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {//data constantly being updated
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {//whatever your pro name is it will use Datasnapshot
                 String link1 = dataSnapshot.child("PV00001").child("product_image").getValue(String.class);
                 String link2 = dataSnapshot.child("PV00002").child("product_image").getValue(String.class);
                 String link3 = dataSnapshot.child("PV00003").child("product_image").getValue(String.class);
-                Picasso.get().load(link1).into(i1);
+                Picasso.get().load(link1).into(i1);//convert link to image load into image view
                 Picasso.get().load(link2).into(i2);
                 Picasso.get().load(link3).into(i3);
             }
@@ -103,7 +103,7 @@ public class MainStore extends AppCompatActivity {
         });
     }
     public void onClickShopNow(View view){
-        Intent page = new Intent(MainStore.this, Categories.class);
+        Intent page = new Intent(MainStore.this, Categories.class);// link to categories
         page.putExtra(EXTRA_MESSAGE, "videogames");
         startActivityForResult(page, TEXT_REQUEST);
     }
