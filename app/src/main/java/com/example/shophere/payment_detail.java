@@ -202,6 +202,7 @@ public class payment_detail extends AppCompatActivity {
                                             break;
                                         case "PV":
                                             dr2 = firebaseDatabase.getReference("product_videogames");
+                                            break;
                                     }
                                     dr2.child(product_id).child("product_stock").addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
