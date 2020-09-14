@@ -80,27 +80,22 @@ public class MenuBar extends AppCompatActivity {
             case R.id.ArtCraft:
                 page.putExtra(EXTRA_MESSAGE, "artcraft");
                 startActivityForResult(page, TEXT_REQUEST);
-                Toast.makeText(MenuBar.this, "Art Craft !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.books:
                 page.putExtra(EXTRA_MESSAGE, "books");
                 startActivityForResult(page, TEXT_REQUEST);
-                Toast.makeText(MenuBar.this, "Books !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.computers:
                 page.putExtra(EXTRA_MESSAGE, "computers");
                 startActivityForResult(page, TEXT_REQUEST);
-                Toast.makeText(MenuBar.this, "Computers !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.fashion:
                 page.putExtra(EXTRA_MESSAGE, "fashion");
                 startActivityForResult(page, TEXT_REQUEST);
-                Toast.makeText(MenuBar.this, "Fashion !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.healthHousehold:
                 page.putExtra(EXTRA_MESSAGE, "healthhousehold");
                 startActivityForResult(page, TEXT_REQUEST);
-                Toast.makeText(MenuBar.this, "Health House Hold !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.homeKitchen:
                 page.putExtra(EXTRA_MESSAGE, "homekitchen");
@@ -109,7 +104,6 @@ public class MenuBar extends AppCompatActivity {
             case R.id.movieTelevision:
                 page.putExtra(EXTRA_MESSAGE, "movietelevision");
                 startActivityForResult(page, TEXT_REQUEST);
-                Toast.makeText(MenuBar.this, "Movie Television !!!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.petSupplies:
                 page.putExtra(EXTRA_MESSAGE, "petsupplies");

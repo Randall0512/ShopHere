@@ -144,7 +144,6 @@ public class payment_detail extends AppCompatActivity {
                 }else if(cardCVV.length() != 3){
                     Toast.makeText(payment_detail.this, "Invalid CVV !!!", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(payment_detail.this, "We are under construction!!!", Toast.LENGTH_SHORT).show();
                     if (buyAll != 0) {
                         databaseReference = firebaseDatabase.getReference("users").child(user_ID).child("shopping_cart");
                         databaseReference.orderByChild("shoppingCart_id").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -231,8 +230,6 @@ public class payment_detail extends AppCompatActivity {
 
                         firebaseDatabase.getReference("users").child(user_ID).child("shopping_cart").removeValue();
                         finish();
-                        //Intent n = new Intent(payment_detail.this, PurchaseHistory.class);
-                        //startActivity(n);
                     }else{
                         history_id = "H" + (num);
                         myHistory = firebaseDatabase.getReference("users").child(user_ID).child("history").child(history_id);
