@@ -135,15 +135,15 @@ public class Categories extends AppCompatActivity {
                         ViewHolder.class,
                         databaseReference
                 ){
-                    @Override
+                    @Override // total product loop 8 times
                     protected void populateViewHolder(ViewHolder viewHolder, product product, int i) {
                         viewHolder.setdetails(getApplicationContext(), product.getProduct_id(), product.getProduct_name(), product.getProduct_image(),product.getProduct_price());
                     }
 
-                    @Override
-                    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-                        ViewHolder viewHolder = super.onCreateViewHolder(parent,viewType);
-                        viewHolder.setOnclickListener(new ViewHolder.ClickListener() {
+                    @Override // click on selected list categories
+                        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                            ViewHolder viewHolder = super.onCreateViewHolder(parent,viewType);
+                            viewHolder.setOnclickListener(new ViewHolder.ClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
                                 TextView id = view.findViewById(R.id.productID);
@@ -162,6 +162,8 @@ public class Categories extends AppCompatActivity {
                         return viewHolder;
                     }
                 };
+
+        //run code line 131
         recyclerView.setAdapter(firebaseRecyclerAdapter);
     }
 }

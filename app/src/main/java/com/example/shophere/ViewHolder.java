@@ -14,6 +14,8 @@ import com.squareup.picasso.Picasso;
 
 public class ViewHolder extends RecyclerView.ViewHolder{
     View view;
+
+    //for clicking on categories
     public ViewHolder (@NonNull View itemView) {
         super(itemView);
         view = itemView;
@@ -31,24 +33,29 @@ public class ViewHolder extends RecyclerView.ViewHolder{
             }
         });
     }
+
+    //show layout code
     public void setdetails(Context ct, String pID, String pn, String pi, double pp){
         TextView text_productID = view.findViewById(R.id.productID);
         TextView text_productName = view.findViewById(R.id.productName);
         TextView text_productPrice = view.findViewById(R.id.productPrice);
         ImageView image_product = view.findViewById(R.id.productImage);
 
+        //layout (list categories)
         text_productID.setText(pID);
         text_productName.setText(pn);
         text_productPrice.setText(String.format("RM %.2f", pp));
         Picasso.get().load(pi).into(image_product);
 
+
+        //left animation pop out
         Animation animation = AnimationUtils.loadAnimation(ct, android.R.anim.slide_in_left);
         itemView.startAnimation(animation);
     }
     private ViewHolder.ClickListener mClicklistener;
-    public interface ClickListener {
-        void onItemClick(View view, int position);
-        void onItemLongClick(View view, int position);
+        public interface ClickListener {
+            void onItemClick(View view, int position);
+            void onItemLongClick(View view, int position);
     }
     public void setOnclickListener(ViewHolder.ClickListener clickListener){
         mClicklistener = clickListener;
