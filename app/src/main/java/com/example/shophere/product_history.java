@@ -1,16 +1,16 @@
 package com.example.shophere;
 
+//minxiong
+
+//declare fire-base attributes
 public class product_history {
     String history_id, product_id;
     int quantity;
     double product_price;
     public product_history(){
-
     }
 
-    public String getHistory_id() {
-        return history_id;
-    }
+    public String getHistory_id() { return history_id; }
 
     public void setHistory_id(String history_id) {
         this.history_id = history_id;

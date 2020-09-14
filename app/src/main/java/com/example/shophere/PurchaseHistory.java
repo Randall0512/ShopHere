@@ -1,5 +1,6 @@
 package com.example.shophere;
 
+//minxiong
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 public class PurchaseHistory extends AppCompatActivity {
     String currentUserID, historyID;
     FirebaseDatabase firebaseDatabase;
@@ -46,13 +48,13 @@ public class PurchaseHistory extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         currentUserID = mFirebaseAuth.getCurrentUser().getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("users").child(currentUserID).child("history");
+        databaseReference = firebaseDatabase.getReference("users").child(currentUserID).child("history");  //set databasereference with real time database location.
         findUser = firebaseDatabase.getReference("users").child(currentUserID);
 
         recyclerView = findViewById(R.id.HistoryCartList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         userName = (TextView)findViewById(R.id.customer_name);
-        list = (ScrollView)findViewById(R.id.listCart);
+        list = (ScrollView)findViewById(R.id.listCart);   //find layout id
         no = (TextView)findViewById(R.id.no);
 
         // Bottom Navigation
@@ -89,7 +91,7 @@ public class PurchaseHistory extends AppCompatActivity {
         super.onStart();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {      //databaseReference change to dataSnapshot
                 if(dataSnapshot.exists()){
                     list.setVisibility(View.VISIBLE);
                     no.setVisibility(View.GONE);
@@ -106,15 +108,15 @@ public class PurchaseHistory extends AppCompatActivity {
         });
         FirebaseRecyclerAdapter<product_history, HistoryViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<product_history, HistoryViewHolder>(
-                        product_history.class,
-                        R.layout.list_history,
+                        product_history.class, // read the product_history class that declared in "product_history.java"
+                        R.layout.list_history, // list item one layout "format"
                         HistoryViewHolder.class,
-                        databaseReference
+                        databaseReference // query
                 ) {
                     @Override
                     public void populateViewHolder(final HistoryViewHolder historyViewHolder, final product_history product, int i) {
-                        String checkProduct = product.getProduct_id().substring(0, 2);
-                        switch (checkProduct) {
+                        String checkProduct = product.getProduct_id().substring(0, 2); // get database product_id
+                        switch (checkProduct) { // compare database product_id ( find categories)
                             case "PA":
                                 dr = firebaseDatabase.getReference("product_artcraft");
                                 break;
@@ -146,7 +148,7 @@ public class PurchaseHistory extends AppCompatActivity {
                                 dr = firebaseDatabase.getReference("product_videogames");
                                 break;
                         }
-                        dRef = dr.child(product.getProduct_id());
+                        dRef = dr.child(product.getProduct_id()); // Set dRef = product Id that purchased (history)
                         dRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -167,7 +169,7 @@ public class PurchaseHistory extends AppCompatActivity {
                         final HistoryViewHolder viewHolder = super.onCreateViewHolder(parent,viewType);
                         viewHolder.setOnclickListener(new HistoryViewHolder.ClickListener() {
                             @Override
-                            public void onItemClick(View view, int position) {
+                            public void onItemClick(View view, int position) { // show payment complete
                                 Intent intent = new Intent(PurchaseHistory.this, PaymentComplete.class);
                                 intent.putExtra("history", getItem(position).getHistory_id());
                                 intent.putExtra("productID", getItem(position).getProduct_id());
@@ -175,7 +177,7 @@ public class PurchaseHistory extends AppCompatActivity {
                                 startActivity(intent);
                             }
                             @Override
-                            public void onItemLongClick(View view, int position) {
+                            public void onItemLongClick(View view, int position) { //delete history ( product ) <- function line 218
                                 p = position;
                                 AlertDialog.Builder builder = new AlertDialog.Builder(PurchaseHistory.this);
                                 builder.setMessage("Are you sure you want DELETE Your History item?").setCancelable(false)
@@ -200,7 +202,7 @@ public class PurchaseHistory extends AppCompatActivity {
                     }
                 };
         recyclerView.setAdapter(firebaseRecyclerAdapter);
-        findUser.addValueEventListener(new ValueEventListener() {
+        findUser.addValueEventListener(new ValueEventListener() { // find username
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String name = dataSnapshot.child("username").getValue(String.class);
